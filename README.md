@@ -27,7 +27,7 @@ A modern, responsive expense tracking web application built with HTML, CSS, and 
 
 ## Live Demo
 
-View the live application at: [https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/)
+View the live application at: [https://Shaurya-2005-cod.github.io/Expense-tracker-FSD-/](https://Shaurya-2005-cod.github.io/Expense-tracker-FSD-/)
 
 ## Contributing
 
