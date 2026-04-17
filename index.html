@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flowt — Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient background blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="logo-mark">F</span>
+        <span class="logo-text">flowt</span>
+      </div>
+
+      <nav class="nav">
+        <a href="#" class="nav-item active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Overview
+        </a>
+        <a href="#" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Entry
+        </a>
+        <a href="#" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Analytics
+        </a>
+        <a href="#" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          Settings
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <button class="theme-btn" id="themeToggle">
+          <svg id="themeIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          Toggle theme
+        </button>
+        <button class="export-btn" id="exportBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export CSV
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- Header -->
+      <header class="top-bar">
+        <div>
+          <h1 class="page-title">Overview</h1>
+          <p class="page-sub" id="currentMonth"></p>
+        </div>
+        <div class="filter-row">
+          <select id="monthFilter" class="filter-select">
+            <option value="all">All time</option>
+          </select>
+          <select id="categoryFilter" class="filter-select">
+            <option value="all">All categories</option>
+            <option value="food">Food</option>
+            <option value="rent">Rent</option>
+            <option value="travel">Travel</option>
+            <option value="shopping">Shopping</option>
+            <option value="utilities">Utilities</option>
+            <option value="health">Health</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="income">Income</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </header>
+
+      <!-- Summary Cards -->
+      <section class="metrics-row">
+        <div class="metric-card income-card">
+          <div class="metric-label">Total income</div>
+          <div class="metric-value" id="totalIncome">₹0</div>
+          <div class="metric-bar"><div class="metric-bar-fill income-fill" id="incomeBar" style="width:0%"></div></div>
+        </div>
+        <div class="metric-card expense-card">
+          <div class="metric-label">Total expenses</div>
+          <div class="metric-value" id="totalExpenses">₹0</div>
+          <div class="metric-bar"><div class="metric-bar-fill expense-fill" id="expenseBar" style="width:0%"></div></div>
+        </div>
+        <div class="metric-card balance-card">
+          <div class="metric-label">Net balance</div>
+          <div class="metric-value" id="netBalance">₹0</div>
+          <div class="metric-tag" id="balanceTag">—</div>
+        </div>
+        <div class="metric-card savings-card">
+          <div class="metric-label">Savings rate</div>
+          <div class="metric-value" id="savingsRate">0%</div>
+          <div class="metric-tag" id="savingsTag">of income</div>
+        </div>
+      </section>
+
+      <!-- Content Grid -->
+      <div class="content-grid">
+
+        <!-- Transaction List -->
+        <section class="panel txn-panel">
+          <div class="panel-head">
+            <h2 class="panel-title">Transactions</h2>
+            <button class="add-fab" id="openModal">+ New</button>
+          </div>
+          <div class="txn-list" id="txnList">
+            <div class="empty-state" id="emptyState">
+              <div class="empty-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <p>No transactions yet.<br/>Hit <strong>+ New</strong> to get started.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right column -->
+        <div class="right-col">
+
+          <!-- Chart -->
+          <section class="panel chart-panel">
+            <div class="panel-head">
+              <h2 class="panel-title">By category</h2>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="donutChart"></canvas>
+              <div class="chart-center">
+                <span id="chartTotal">₹0</span>
+                <small>spent</small>
+              </div>
+            </div>
+            <div class="legend" id="chartLegend"></div>
+          </section>
+
+          <!-- Budget alerts -->
+          <section class="panel budget-panel">
+            <div class="panel-head">
+              <h2 class="panel-title">Budget limits</h2>
+              <button class="tiny-btn" id="openBudget">Edit</button>
+            </div>
+            <div id="budgetList" class="budget-list"></div>
+          </section>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD TRANSACTION MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>New transaction</h3>
+        <button class="modal-close" id="closeModal">✕</button>
+      </div>
+
+      <div class="type-toggle">
+        <button class="type-btn active" data-type="expense" id="typeExpense">Expense</button>
+        <button class="type-btn" data-type="income" id="typeIncome">Income</button>
+      </div>
+
+      <div class="form-body">
+        <div class="field">
+          <label>Description</label>
+          <input type="text" id="txnDesc" placeholder="e.g. Monthly rent" />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Amount (₹)</label>
+            <input type="number" id="txnAmount" placeholder="0" min="0" />
+          </div>
+          <div class="field">
+            <label>Date</label>
+            <input type="date" id="txnDate" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="txnCategory">
+            <option value="food">Food</option>
+            <option value="rent">Rent</option>
+            <option value="travel">Travel</option>
+            <option value="shopping">Shopping</option>
+            <option value="utilities">Utilities</option>
+            <option value="health">Health</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <button class="submit-btn" id="submitTxn">Add transaction</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUDGET MODAL -->
+  <div class="modal-overlay" id="budgetOverlay">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Set budget limits</h3>
+        <button class="modal-close" id="closeBudget">✕</button>
+      </div>
+      <div class="form-body" id="budgetForm"></div>
+      <div style="padding: 0 1.5rem 1.5rem;">
+        <button class="submit-btn" id="saveBudget">Save limits</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
